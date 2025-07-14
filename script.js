@@ -1,100 +1,166 @@
-// Simulador de compra en un kiosco
+// Clase Producto
+class Producto {
+    constructor(id, nombre, precio) {
+        this.id = id;
+        this.nombre = nombre;
+        this.precio = parseFloat(precio);
+    }
+}
 
-// Array de objetos literales con los productos del kiosco
-const productos = [
-    { nombre: "Gaseosa", precio: 500 },
-    { nombre: "Alfajor", precio: 350 },
-    { nombre: "Galletitas", precio: 400 },
-    { nombre: "Caramelo", precio: 100 },
-    { nombre: "Chicle", precio: 150 }
+// Clase Carrito
+class Carrito {
+    constructor() {
+        this.productos = [];
+        this.total = 0;
+    }
+
+    agregar(producto) {
+        const index = this.productos.findIndex(p => p.id === producto.id);
+        if (index !== -1) {
+            // Si ya existe, incrementamos cantidad
+            this.productos[index].cantidad += 1;
+        } else {
+            // Si no existe, lo agregamos con cantidad inicial 1
+            this.productos.push({ ...producto, cantidad: 1 });
+        }
+        this.actualizarTotal();
+    }
+
+    quitar(id) {
+        this.productos = this.productos.filter(item => item.id !== id);
+        this.actualizarTotal();
+    }
+
+    vaciar() {
+        this.productos = [];
+        this.actualizarTotal();
+    }
+
+    actualizarTotal() {
+        this.total = this.productos.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
+    }
+}
+
+// Productos predefinidos
+const productosDisponibles = [
+    new Producto(1, "Gaseosa", 250),
+    new Producto(2, "Jugo", 180),
+    new Producto(3, "Chocolatada", 300),
+    new Producto(4, "Sandwich", 350),
+    new Producto(5, "Yogurt", 220),
+    new Producto(6, "Agua Mineral", 150)
 ];
 
-// Array vacío para almacenar los productos seleccionados por el usuario
-let carrito = [];
+let carrito = new Carrito();
 
-// Función para mostrar los productos disponibles en consola
-function mostrarProductos() {
-    console.log("Productos disponibles:");
-    for (const producto of productos) {
-        console.log(`${producto.nombre} - $${producto.precio}`);
+// Cargar carrito desde localStorage si existe
+document.addEventListener("DOMContentLoaded", () => {
+    const carritoGuardado = localStorage.getItem("carrito");
+    if (carritoGuardado) {
+        const parsed = JSON.parse(carritoGuardado);
+        carrito.productos = parsed.productos;
+        carrito.total = parsed.total;
     }
+    renderizarProductos();
+    renderizarCarrito();
+});
+
+// Renderizar productos en el DOM
+function renderizarProductos() {
+    const contenedor = document.getElementById("productos-container");
+    contenedor.innerHTML = "";
+
+    productosDisponibles.forEach(producto => {
+        const div = document.createElement("div");
+        div.className = "producto";
+        div.innerHTML = `
+            <h3>${producto.nombre}</h3>
+            <p>Precio: $${producto.precio.toFixed(2)}</p>
+            <button data-id="${producto.id}">Agregar al carrito</button>
+        `;
+        contenedor.appendChild(div);
+    });
+
+    // Agregar evento a los botones de agregar
+    document.querySelectorAll(".producto button").forEach(boton => {
+        boton.addEventListener("click", (e) => {
+            const id = parseInt(e.target.dataset.id);
+            const producto = productosDisponibles.find(p => p.id === id);
+            if (producto) {
+                carrito.agregar(producto);
+                guardarEnLocalStorage();
+                renderizarCarrito();
+            }
+        });
+    });
 }
 
-// Función para agregar un producto al carrito
-const agregarProducto = (nombreProducto) => {
-    const producto = productos.find(item => item.nombre.toLowerCase() === nombreProducto.toLowerCase());
-    if (producto) {
-        carrito.push(producto);
-        alert(`${producto.nombre} fue agregado al carrito.`);
-    } else {
-        alert("Producto no encontrado. Por favor, ingresá un producto válido.");
-    }
-};
+// Renderizar carrito en el DOM
+function renderizarCarrito() {
+    const contenedor = document.getElementById("carrito-container");
+    const totalContenedor = document.getElementById("total-container");
+    const btnFinalizar = document.getElementById("finalizar-compra-btn");
+    const btnVaciar = document.getElementById("vaciar-carrito-btn");
+    const mensajeExito = document.getElementById("mensaje-exito");
 
-// Función flecha para calcular el total de la compra
-const calcularTotal = () => carrito.reduce((total, producto) => total + producto.precio, 0);
+    contenedor.innerHTML = "";
+    mensajeExito.classList.add("hidden");
 
-// Función para mostrar el contenido del carrito en consola
-const mostrarCarrito = () => {
-    console.log("Productos en tu carrito:");
-    for (const producto of carrito) {
-        console.log(`${producto.nombre} - $${producto.precio}`);
-    }
-};
+    btnFinalizar.disabled = carrito.productos.length === 0;
+    btnVaciar.disabled = carrito.productos.length === 0;
 
-// Mensaje de bienvenida
-alert("¡Bienvenido al simulador de compras del kiosco!");
-
-// Mostrar productos en consola
-mostrarProductos();
-
-// Confirmación inicial para empezar a comprar
-let deseaComprar = confirm("¿Deseás realizar una compra en el kiosco?");
-
-while (deseaComprar) {
-    // Mostrar lista de productos al usuario con prompt
-    let listaProductos = "¿Qué producto querés comprar?\n";
-    for (const producto of productos) {
-        listaProductos += `${producto.nombre} - $${producto.precio}\n`;
+    if (carrito.productos.length === 0) {
+        contenedor.innerHTML = "<p>El carrito está vacío.</p>";
+        totalContenedor.textContent = "Total: $0.00";
+        return;
     }
 
-    // do...while para validar que ingrese un producto válido
-    let productoElegido;
-    let productoValido = false;
+    carrito.productos.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "carrito-item";
+        div.innerHTML = `
+            <h3>${item.nombre}</h3>
+            <p>Cantidad: ${item.cantidad}</p>
+            <p>Precio unitario: $${item.precio.toFixed(2)}</p>
+            <p>Total: $${(item.precio * item.cantidad).toFixed(2)}</p>
+            <button data-id="${item.id}">Quitar</button>
+        `;
+        contenedor.appendChild(div);
+    });
 
-    do {
-        productoElegido = prompt(listaProductos);
+    // Botones de quitar individualmente
+    document.querySelectorAll(".carrito-item button").forEach(boton => {
+        boton.addEventListener("click", (e) => {
+            const id = parseInt(e.target.dataset.id);
+            carrito.quitar(id);
+            guardarEnLocalStorage();
+            renderizarCarrito();
+        });
+    });
 
-        // Si el usuario cancela el prompt
-        if (productoElegido === null) {
-            alert("Cancelaste la selección.");
-            continue; // Salta a la siguiente iteración del while
-        }
-
-        productoValido = productos.some(item => item.nombre.toLowerCase() === productoElegido.toLowerCase());
-        if (!productoValido) {
-            alert("Producto no válido. Intentá nuevamente.");
-        }
-    } while (!productoValido);
-
-    // Agregamos el producto válido al carrito
-    agregarProducto(productoElegido);
-
-    // Mostrar cantidad de productos en el carrito usando .length
-    alert(`Llevás ${carrito.length} producto(s) en el carrito.`);
-
-    // Confirmación para seguir comprando o no
-    deseaComprar = confirm("¿Querés agregar otro producto?");
+    totalContenedor.textContent = `Total: $${carrito.total.toFixed(2)}`;
 }
 
-// Mostrar carrito final en consola
-mostrarCarrito();
+// Vaciar carrito
+document.getElementById("vaciar-carrito-btn").addEventListener("click", () => {
+    carrito.vaciar();
+    guardarEnLocalStorage();
+    renderizarCarrito();
+});
 
-// Calcular total de la compra
-const totalCompra = calcularTotal();
+// Finalizar compra
+document.getElementById("finalizar-compra-btn").addEventListener("click", () => {
+    const mensaje = document.getElementById("mensaje-exito");
+    mensaje.classList.remove("hidden");
+    carrito.vaciar();
+    guardarEnLocalStorage();
+    renderizarCarrito();
+});
 
-// Mostrar resumen final al usuario con join()
-const nombresCarrito = carrito.map(item => item.nombre);
-alert("Gracias por tu compra.\nCompraste: " + nombresCarrito.join(", ") + `.\nTotal a abonar: $${totalCompra}`);
-
-console.log("Total de la compra: $" + totalCompra);
+// Guardar carrito en localStorage
+function guardarEnLocalStorage() {
+    localStorage.setItem("carrito", JSON.stringify({
+        productos: carrito.productos,
+        total: carrito.total
+    }));
+}

@@ -1,0 +1,81 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 2rem;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.producto, .carrito-item {
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 1rem;
+    border-radius: 8px;
+    width: 250px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.producto h3, .carrito-item h3 {
+    font-size: 1.2rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.producto p, .carrito-item p {
+    margin: 0.3rem 0;
+}
+
+.producto button,
+.acciones button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+}
+
+.producto button:hover,
+.acciones button:hover {
+    background-color: #0056b3;
+}
+
+.carrito {
+    margin-top: 2rem;
+}
+
+.total {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.acciones {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.mensaje-exito {
+    text-align: center;
+    font-size: 1.1rem;
+    color: green;
+    margin-top: 1rem;
+    display: none;
+}
+
+.hidden {
+    display: none;
+}

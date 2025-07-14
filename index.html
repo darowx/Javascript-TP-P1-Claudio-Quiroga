@@ -1,23 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Simulador de Compra en Kiosco</title>
+    <meta name="description" content="Simulador interactivo de compra en un kiosco desarrollado con JavaScript vanilla." />
+    
+    <!-- Archivo CSS externo -->
+    <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <h1>Simulador de Compra en un Kiosco</h1>
-    <p>
-        Este simulador permite al usuario realizar una compra simulada en un kiosco.
-        A través de cuadros de diálogo (alert, prompt, confirm) el usuario podrá seleccionar productos 
-        disponibles, agregarlos a un carrito virtual, calcular el total de su compra y decidir si 
-        desea seguir comprando o finalizar la operación.
-    </p>
-    <p>
-        El simulador utiliza funcionalidades de JavaScript como variables, constantes, arrays, objetos literales,
-        condicionales (if, else if, else, switch), ciclos de iteración (while, for of), funciones personalizadas
-        y la consola para mostrar mensajes adicionales.
-    </p>
+
+    <h1>🛒 Simulador de Compra en un Kiosco</h1>
+
+    <section>
+        <h2>Productos Disponibles</h2>
+        <div id="productos-container" class="container"></div>
+    </section>
+
+    <section class="carrito">
+        <h2>Tu Carrito</h2>
+        <div id="carrito-container" class="container"></div>
+        <div class="total" id="total-container">Total: $0.00</div>
+        <div class="acciones">
+            <button id="finalizar-compra-btn" disabled>Finalizar Compra</button>
+            <button id="vaciar-carrito-btn" disabled>Vaciar Carrito</button>
+        </div>
+        <div id="mensaje-exito" class="mensaje-exito hidden">✅ ¡Compra finalizada con éxito!</div>
+    </section>
+
+    <!-- Archivo JS vinculado -->
     <script src="script.js"></script>
 </body>
 </html>
