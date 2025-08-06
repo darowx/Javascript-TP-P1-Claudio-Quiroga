@@ -1,0 +1,8 @@
+[
+  { "id": 1, "nombre": "Gaseosa", "precio": 250 },
+  { "id": 2, "nombre": "Jugo", "precio": 180 },
+  { "id": 3, "nombre": "Chocolatada", "precio": 300 },
+  { "id": 4, "nombre": "Sandwich", "precio": 350 },
+  { "id": 5, "nombre": "Yogurt", "precio": 220 },
+  { "id": 6, "nombre": "Agua Mineral", "precio": 150 }
+]

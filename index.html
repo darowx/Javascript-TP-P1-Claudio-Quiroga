@@ -5,31 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Simulador de Compra en Kiosco</title>
     <meta name="description" content="Simulador interactivo de compra en un kiosco desarrollado con JavaScript vanilla." />
-    
-    <!-- Archivo CSS externo -->
+
+    <!-- Estilos externos -->
     <link rel="stylesheet" href="styles.css" />
+
+    <!-- Librería externa: Toastify (para notificaciones visuales) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 <body>
 
-    <h1>🛒 Simulador de Compra en un Kiosco</h1>
+    <header>
+        <h1>🛒 Simulador de Compra en un Kiosco</h1>
+    </header>
 
-    <section>
-        <h2>Productos Disponibles</h2>
-        <div id="productos-container" class="container"></div>
-    </section>
+    <main>
+        <!-- Sección de productos -->
+        <section>
+            <h2>Productos Disponibles</h2>
+            <div id="productos-container" class="container"></div>
+        </section>
 
-    <section class="carrito">
-        <h2>Tu Carrito</h2>
-        <div id="carrito-container" class="container"></div>
-        <div class="total" id="total-container">Total: $0.00</div>
-        <div class="acciones">
-            <button id="finalizar-compra-btn" disabled>Finalizar Compra</button>
-            <button id="vaciar-carrito-btn" disabled>Vaciar Carrito</button>
-        </div>
-        <div id="mensaje-exito" class="mensaje-exito hidden">✅ ¡Compra finalizada con éxito!</div>
-    </section>
+        <!-- Sección del carrito -->
+        <section class="carrito">
+            <h2>Tu Carrito</h2>
+            <div id="carrito-container" class="container"></div>
+            <div class="total" id="total-container">Total: $0.00</div>
+            <div class="acciones">
+                <button id="finalizar-compra-btn" disabled>Finalizar Compra</button>
+                <button id="vaciar-carrito-btn" disabled>Vaciar Carrito</button>
+            </div>
+            <div id="mensaje-exito" class="mensaje-exito hidden">✅ ¡Compra finalizada con éxito!</div>
+        </section>
+    </main>
 
-    <!-- Archivo JS vinculado -->
+    <footer>
+        <p style="text-align: center; margin-top: 2rem;">&copy; 2025 - Proyecto de simulación JavaScript</p>
+    </footer>
+
+    <!-- Librería externa: Toastify JS -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <!-- Archivo JS principal -->
     <script src="script.js"></script>
 </body>
 </html>

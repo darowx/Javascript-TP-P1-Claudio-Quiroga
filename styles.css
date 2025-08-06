@@ -1,4 +1,6 @@
-/* styles.css */
+/* =======================
+   Estilos generales
+   ======================= */
 body {
     font-family: Arial, sans-serif;
     margin: 2rem;
@@ -6,10 +8,17 @@ body {
     color: #333;
 }
 
+/* =======================
+   Encabezados
+   ======================= */
 h1, h2 {
     text-align: center;
+    color: #222;
 }
 
+/* =======================
+   Contenedor principal
+   ======================= */
 .container {
     display: flex;
     flex-wrap: wrap;
@@ -18,7 +27,11 @@ h1, h2 {
     margin-top: 2rem;
 }
 
-.producto, .carrito-item {
+/* =======================
+   Tarjetas de productos y carrito
+   ======================= */
+.producto,
+.carrito-item {
     background-color: white;
     border: 1px solid #ddd;
     padding: 1rem;
@@ -27,17 +40,23 @@ h1, h2 {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.producto h3, .carrito-item h3 {
+.producto h3,
+.carrito-item h3 {
     font-size: 1.2rem;
-    margin: 0 0 0.5rem 0;
+    margin-bottom: 0.5rem;
 }
 
-.producto p, .carrito-item p {
+.producto p,
+.carrito-item p {
     margin: 0.3rem 0;
 }
 
+/* =======================
+   Botones principales
+   ======================= */
 .producto button,
-.acciones button {
+.acciones button,
+.carrito-item button {
     margin-top: 1rem;
     padding: 0.5rem 1rem;
     cursor: pointer;
@@ -45,17 +64,25 @@ h1, h2 {
     color: white;
     border: none;
     border-radius: 4px;
+    transition: background-color 0.3s ease;
 }
 
 .producto button:hover,
-.acciones button:hover {
+.acciones button:hover,
+.carrito-item button:hover {
     background-color: #0056b3;
 }
 
+/* =======================
+   Sección del carrito
+   ======================= */
 .carrito {
-    margin-top: 2rem;
+    margin-top: 3rem;
 }
 
+/* =======================
+   Total del carrito
+   ======================= */
 .total {
     font-weight: bold;
     font-size: 1.2rem;
@@ -63,11 +90,17 @@ h1, h2 {
     text-align: center;
 }
 
+/* =======================
+   Acciones: Finalizar y Vaciar
+   ======================= */
 .acciones {
     margin-top: 2rem;
     text-align: center;
 }
 
+/* =======================
+   Mensaje de compra finalizada
+   ======================= */
 .mensaje-exito {
     text-align: center;
     font-size: 1.1rem;
@@ -78,4 +111,13 @@ h1, h2 {
 
 .hidden {
     display: none;
+}
+
+/* =======================
+   Responsive básico (mobile)
+   ======================= */
+@media (max-width: 600px) {
+    .producto, .carrito-item {
+        width: 90%;
+    }
 }

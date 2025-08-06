@@ -17,13 +17,18 @@ class Carrito {
     agregar(producto) {
         const index = this.productos.findIndex(p => p.id === producto.id);
         if (index !== -1) {
-            // Si ya existe, incrementamos cantidad
             this.productos[index].cantidad += 1;
         } else {
-            // Si no existe, lo agregamos con cantidad inicial 1
             this.productos.push({ ...producto, cantidad: 1 });
         }
         this.actualizarTotal();
+        Toastify({
+            text: `${producto.nombre} agregado al carrito`,
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: "#007bff"
+        }).showToast();
     }
 
     quitar(id) {
@@ -41,29 +46,34 @@ class Carrito {
     }
 }
 
-// Productos predefinidos
-const productosDisponibles = [
-    new Producto(1, "Gaseosa", 250),
-    new Producto(2, "Jugo", 180),
-    new Producto(3, "Chocolatada", 300),
-    new Producto(4, "Sandwich", 350),
-    new Producto(5, "Yogurt", 220),
-    new Producto(6, "Agua Mineral", 150)
-];
-
+let productosDisponibles = []; // Se cargará desde fetch
 let carrito = new Carrito();
 
-// Cargar carrito desde localStorage si existe
-document.addEventListener("DOMContentLoaded", () => {
+// Cargar datos del carrito desde localStorage si existen
+document.addEventListener("DOMContentLoaded", async () => {
     const carritoGuardado = localStorage.getItem("carrito");
     if (carritoGuardado) {
         const parsed = JSON.parse(carritoGuardado);
         carrito.productos = parsed.productos;
         carrito.total = parsed.total;
     }
-    renderizarProductos();
+
+    // Cargar productos desde JSON externo
+    await cargarProductos();
     renderizarCarrito();
 });
+
+// Cargar productos desde archivo JSON
+async function cargarProductos() {
+    try {
+        const response = await fetch("productos.json");
+        const data = await response.json();
+        productosDisponibles = data.map(p => new Producto(p.id, p.nombre, p.precio));
+        renderizarProductos();
+    } catch (error) {
+        alert("Error al cargar los productos. Intente más tarde.");
+    }
+}
 
 // Renderizar productos en el DOM
 function renderizarProductos() {
@@ -81,7 +91,7 @@ function renderizarProductos() {
         contenedor.appendChild(div);
     });
 
-    // Agregar evento a los botones de agregar
+    // Evento para cada botón "Agregar al carrito"
     document.querySelectorAll(".producto button").forEach(boton => {
         boton.addEventListener("click", (e) => {
             const id = parseInt(e.target.dataset.id);
@@ -95,7 +105,7 @@ function renderizarProductos() {
     });
 }
 
-// Renderizar carrito en el DOM
+// Renderizar el carrito en el DOM
 function renderizarCarrito() {
     const contenedor = document.getElementById("carrito-container");
     const totalContenedor = document.getElementById("total-container");
@@ -128,7 +138,7 @@ function renderizarCarrito() {
         contenedor.appendChild(div);
     });
 
-    // Botones de quitar individualmente
+    // Evento para cada botón "Quitar"
     document.querySelectorAll(".carrito-item button").forEach(boton => {
         boton.addEventListener("click", (e) => {
             const id = parseInt(e.target.dataset.id);
@@ -141,7 +151,7 @@ function renderizarCarrito() {
     totalContenedor.textContent = `Total: $${carrito.total.toFixed(2)}`;
 }
 
-// Vaciar carrito
+// Vaciar el carrito completamente
 document.getElementById("vaciar-carrito-btn").addEventListener("click", () => {
     carrito.vaciar();
     guardarEnLocalStorage();
@@ -152,12 +162,21 @@ document.getElementById("vaciar-carrito-btn").addEventListener("click", () => {
 document.getElementById("finalizar-compra-btn").addEventListener("click", () => {
     const mensaje = document.getElementById("mensaje-exito");
     mensaje.classList.remove("hidden");
+
+    Toastify({
+        text: "¡Gracias por tu compra!",
+        duration: 4000,
+        gravity: "top",
+        position: "center",
+        backgroundColor: "green"
+    }).showToast();
+
     carrito.vaciar();
     guardarEnLocalStorage();
     renderizarCarrito();
 });
 
-// Guardar carrito en localStorage
+// Guardar en localStorage
 function guardarEnLocalStorage() {
     localStorage.setItem("carrito", JSON.stringify({
         productos: carrito.productos,
